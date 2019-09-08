@@ -1,0 +1,27 @@
+{
+  "name": "svelte-mobx",
+  "description": "Reactive MVVM with MobX & Svelte",
+  "version": "0.0.4",
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
+  "files": ["lib"],
+  "repository": "https://github.com/xelaok/svelte-mobx",
+  "author": "Alexander Kozlovich <alexander.kozlovich@gmail.com>",
+  "license": "MIT",
+  "keywords": ["svelte", "mobx", "mvvm"],
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "dependencies": {
+    "mobx": "^5",
+    "svelte": "^3"
+  },
+  "devDependencies": {
+    "rollup": "^1.20.3",
+    "rollup-plugin-terser": "^5.1.1",
+    "rollup-plugin-typescript2": "^0.24.0",
+    "typescript": "^3.6.2"
+  }
+}
