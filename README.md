@@ -19,7 +19,7 @@ new App({
 });
 ```
 
-```sveltehtml
+```svelte
 // App.svelte
 
 <script context="module">
