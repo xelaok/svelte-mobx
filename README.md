@@ -4,7 +4,7 @@
 ## Installation
 
 ```bash
-npm i -S svelte-mobx
+npm i svelte-mobx
 ```
 
 ## Usage ([example repository](https://github.com/xelaok/svelte-mobx-example))
