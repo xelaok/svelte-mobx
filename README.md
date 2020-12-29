@@ -1,5 +1,5 @@
 ## svelte-mobx ([npm](https://www.npmjs.com/package/svelte-mobx))
-Reactive MVVM with [MobX](https://mobx.js.org) & [Svelte](https://svelte.dev)
+[MobX](https://mobx.js.org) connector for [Svelte](https://svelte.dev)
 
 ## Installation
 
@@ -9,8 +9,17 @@ npm i -S svelte-mobx
 
 ## Usage ([example repository](https://github.com/xelaok/svelte-mobx-example))
 
-View
-```html
+```typescript
+import App from "./App.svelte";
+import { AppVm } from "./App.vm";
+
+new App({
+    props: { vm: new AppVm() },
+    target: document.body,
+});
+```
+
+```sveltehtml
 // App.svelte
 
 <script context="module">
@@ -18,59 +27,58 @@ View
 </script>
 
 <script>
+    export let vm;
     const { autorun } = connect();
 
-    export let vm;
-
-    let formattedCurrentTime;
-    let formattedElapsedSeconds;
+    let currentTimeString;
+    let elapsedSecondsString;
 
     $: autorun(() => {
-        formattedCurrentTime = vm.formattedCurrentTime;
-        formattedElapsedSeconds = vm.formattedElapsedSeconds;
+        currentTimeString = vm.currentTimeString;
+        elapsedSecondsString = vm.elapsedSecondsString;
     });
 </script>
 
 <div>
-    <h1>The time is {formattedCurrentTime}</h1>
-    <div>This page has been open for {formattedElapsedSeconds}</div>
+    <h1>The time is {currentTimeString}</h1>
+    <div>This page has been open for {elapsedSecondsString}</div>
 </div>
 ```
-
-View Model
 
 ```typescript
 // App.vm.ts
 
-class AppVM {
-    @observable
-    startTime: Date;
+export class AppVm {
+    startTime: Date = new Date();
+    currentTime: Date = new Date();
 
-    @observable
-    currentTime: Date;
+    constructor() {
+        makeAutoObservable(this, {
+            startTime: observable,
+            currentTime: observable,
+            elapsedSeconds: computed,
+            currentTimeString: computed,
+            elapsedSecondsString: computed,
+            updateCurrentTime: action,
+        });
 
-    @computed
-    get elapsedSeconds(): number {
+        setInterval(() => this.updateCurrentTime(), UPDATE_INTERVAL);
+    }
+
+    get elapsedSeconds() {
         return Math.round((this.currentTime.getTime() - this.startTime.getTime()) / 1000);
     }
 
-    @computed
-    get formattedCurrentTime(): string {
+    get currentTimeString() {
         return timeFormatter.format(this.currentTime);
     }
 
-    @computed
-    get formattedElapsedSeconds(): string {
+    get elapsedSecondsString() {
         return `${this.elapsedSeconds} ${this.elapsedSeconds === 1 ? "second" : "seconds"}`;
     }
 
-    constructor() {
-        this.startTime = new Date();
-        this.currentTime = this.startTime;
-    }
-
-    load() {
-        setInterval(() => this.currentTime = new Date(), 100);
+    updateCurrentTime() {
+        this.currentTime = new Date();
     }
 }
 ```
