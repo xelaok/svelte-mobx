@@ -49,8 +49,8 @@ new App({
 // App.vm.ts
 
 export class AppVm {
-    startTime: Date = new Date();
-    currentTime: Date = new Date();
+    startTime = new Date();
+    currentTime = new Date();
 
     constructor() {
         makeAutoObservable(this, {
